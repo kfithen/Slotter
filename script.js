@@ -139,6 +139,16 @@ function draw() {
 	requestAnimationFrame(draw);
 }
 
+// changes canvas size to window size
+function changeCanvasSize() {
+	gameCanvas.width = window.innerWidth;
+	gameCanvas.height = window.innerHeight;
+}
+
+addEventListener("resize", changeCanvasSize);
+
+changeCanvasSize();
+
 new Slot(slotCount);
 spinSlots();
 
