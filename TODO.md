@@ -1,6 +1,10 @@
 # TODO (Slotter)
 
-- Seperate project into separate files [-]
+## Completed
+
+- Seperate project into separate files [X]
+
+## Not Completed
 
 - Document what each function does with comments [-]
 
