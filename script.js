@@ -60,82 +60,34 @@ function drawSlots() {
 }
 
 var buttons = [];
+const buttonContainer = document.querySelector("#button_container");
 
-class Button {
-	constructor(_x, _y, _text) {
-		this.x = _x;
-		this.y = _y;
-		this.width = 100;
-		this.height = 40;
-		this.text = _text;
-		this.selected = false;
-		this.color = "#FFFF00";
-		this.selected_color = "#FFFF99";
-		buttons.push(this);
-	}
-
-	draw() {
-		setStyle();
-		ctx.fillStyle = this.color;
-		if (this.selected) {
-			ctx.fillStyle = this.selected_color;
-		}
-		ctx.fillRect(this.x, this.y, this.width, this.height);
-		ctx.strokeText(this.text, this.x + 25 / 2, this.y + 25);
-	}
-
-	onclick() {
-		alert("button clicked!");
-	}
+function createButton(_text, _id, _class, _function) {
+	let _button = document.createElement("button");
+	_button.innerHTML = _text;
+	_button.id = _id;
+	_button.class = _class;
+	_button.onclick = _function;
+	buttons.push(_button);
+	return _button;
 }
 
-var spinButton = new Button(375, 435, "spin slots");
+function test() { alert("test!"); } 
 
-function drawUI() {
-	setStyle();
-	ctx.fillText("$" + money, 25, 460);
+var spinButton = createButton("SPIN", "spin_button", "", test);
+
+function populateUI() {
 	for (let i = 0; i < buttons.length; i++) {
-		buttons[i].draw();
+		buttonContainer.appendChild(buttons[i]);
 	}
 }
 
-// mouse shit but related to buttons
-function getMousePos(gameCanvas, event) {
-    const rect = gameCanvas.getBoundingClientRect();
-    return {
-    	x: event.clientX - rect.left,
-    	y: event.clientY - rect.top
-    };
-}
-
-function handleHovering(event) {
-	const mousePos = getMousePos(gameCanvas, event);
-	for (let i = 0; i < buttons.length; i++) {
-		if (mousePos.x >= buttons[i].x && mousePos.x <= buttons[i].x + buttons[i].width && mousePos.y >= buttons[i].y && mousePos.y <= buttons[i].y + buttons[i].width) {
-			buttons[i].selected = true;
-		} else {
-			buttons[i].selected = false;
-		}
-	}
-}
-
-function handleClick(event) {
-	const mousePos = getMousePos(gameCanvas, event);
-	for (let i = 0; i < buttons.length; i++) {
-		if (mousePos.x >= buttons[i].x && mousePos.x <= buttons[i].x + buttons[i].width && mousePos.y >= buttons[i].y && mousePos.y <= buttons[i].y + buttons[i].width) {
-			buttons[i].onclick();
-		}
-	}
-}
-
-gameCanvas.addEventListener("mousemove", handleHovering);
-gameCanvas.addEventListener("click", handleClick);
+populateUI();
 
 // main function(s)
 function draw() {
 	ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
 	drawSlots();
-	drawUI();
 	requestAnimationFrame(draw);
 }
 
