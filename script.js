@@ -21,9 +21,18 @@ const slotTime = 3000 // 3 seconds in milliseconds
 // money variables
 var money = 0;
 
-// random math function that is needed like once
-function rand_range(min, max) {
-	return Math.floor(Math.random() * (max - min + 1)) + min;
+/** Returns a random integer in [min, max).
+ *  Min is inclusive, max is exclusive. Min and Max are converted to integers first.
+ *  @param {number} min - no number less than this will be returned
+ *  @param {number} max - no number greater than or equal to this will be returned
+ *
+ *  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random#getting_a_random_integer_between_two_values
+ */
+function getRandomInt(min, max) {
+	const minCeiled = Math.ceil(min);
+	const maxFloored = Math.floor(max);
+	return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled);
+	// The maximum is exclusive and the minimum is inclusive
 }
 
 // slot spinning logic
@@ -37,7 +46,7 @@ class Slot {
 
 	spin() {
 		// selects a random result symbol from the array
-		this.result = slotSymbols[rand_range(0, slotSymbols.length - 1)];
+		this.result = slotSymbols[getRandomInt(0, slotSymbols.length)];
 		console.log("slot: " + this.id + "\n" + "result: " + this.result);
 	}
 }
@@ -72,9 +81,7 @@ function createButton(_text, _id, _class, _function) {
 	return _button;
 }
 
-function test() { alert("test!"); } 
-
-var spinButton = createButton("SPIN", "spin_button", "", test);
+var spinButton = createButton("SPIN", "spin_button", "", () => { spinSlots() });
 
 function populateUI() {
 	for (let i = 0; i < buttons.length; i++) {
