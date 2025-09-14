@@ -4,10 +4,7 @@ const buttonContainer = document.querySelector("#button_container");
 // slot variables
 var slots = [];
 var slotCount = 0;
-var slotPos = {x: 0, y: 0};
 var lastSpinTime = 0;
-const slotWidth = 100;
-const slotHeight = 100;
 const slotSymbols = ["cherry", "lemon", "grapes", "bar", "seven"];
 const slotTime = 3000 // 3 seconds in milliseconds
 
@@ -44,7 +41,7 @@ class Slot {
 	spin() {
 		this.result = slotSymbols[getRandomInt(0, slotSymbols.length)];
 		//this.element.innerHTML = "<p>" + this.result + "</p>";
-		this.element.src = "/assets/" + this.result + ".png";
+		this.element.src = "./assets/" + this.result + ".png";
 		console.log("slot: " + this.id + "\n" + "result: " + this.result);
 	}
 }
