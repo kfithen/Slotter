@@ -24,6 +24,8 @@ function getRandomInt(min, max) {
 	return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled);
 	// The maximum is exclusive and the minimum is inclusive
 }
+const spinsPerSlot = 10;
+const spinSpeed = 100;
 
 class Slot {
 	/** Creates a new slot and appends it to the slots array. */
@@ -39,18 +41,33 @@ class Slot {
 	}
 
 	spin() {
-		this.result = slotSymbols[getRandomInt(0, slotSymbols.length)];
-		//this.element.innerHTML = "<p>" + this.result + "</p>";
-		this.element.src = "./assets/" + this.result + ".png";
-		console.log("slot: " + this.id + "\n" + "result: " + this.result);
+		var spinCount = 0;
+
+		const doSpin = () => {
+			// spinny animation (just swaps images for rn)
+			// time between changes (possible upgrade?)
+			const tempResult = slotSymbols[getRandomInt(0, slotSymbols.length)];
+			this.element.src = "./assets/" + tempResult + ".png"
+			spinCount++;
+
+			if (spinCount < spinsPerSlot) {
+				setTimeout(doSpin, spinSpeed);
+			} else {
+				//final result
+				this.result = slotSymbols[getRandomInt(0, slotSymbols.length)];
+				this.element.src = "./assets/" + this.result + ".png";
+			}
+		}
+
+		doSpin();
 	}
 }
 
-function spinSlots() {
+/*function spinSlots() {
 	for (let i = 0; i < slots.length; i++) {
 		slots[i].spin();
 	}
-}
+}*/
 
 var buttons = [];
 
@@ -64,6 +81,10 @@ function createButton(_text, _id, _class, _function) {
 	return _button;
 }
 
+function spinSlots() {
+	slots.forEach(slot => {slot.spin()});
+}
+
 var spinButton = createButton("SPIN", "spin_button", "", () => { spinSlots() });
 var newSlotButton = createButton("NEW SLOT", "new-slot-button", "", () => { new Slot() });
 
@@ -74,9 +95,5 @@ function populateUI() {
 }
 
 populateUI();
-
-//new Slot(slotCount);
 new Slot();
 spinSlots();
-
-setInterval(spinSlots, slotTime);
