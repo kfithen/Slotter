@@ -1,12 +1,5 @@
-const gameCanvas = document.querySelector("#game_canvas");
-const ctx = gameCanvas.getContext("2d");
-
-// font setup
-function setStyle() {
-	ctx.font = "20px serif";
-	ctx.fillStyle = "#000000";
-	ctx.strokeStyle = "#000000";
-}
+const slotsDiv = document.querySelector("#slots");
+const buttonContainer = document.querySelector("#button_container");
 
 // slot variables
 var slots = [];
@@ -15,7 +8,7 @@ var slotPos = {x: 0, y: 0};
 var lastSpinTime = 0;
 const slotWidth = 100;
 const slotHeight = 100;
-const slotSymbols = ["cherry", "lemon", "grape", "bar", "seven"];
+const slotSymbols = ["cherry", "lemon", "grapes", "bar", "seven"];
 const slotTime = 3000 // 3 seconds in milliseconds
 
 // money variables
@@ -35,41 +28,34 @@ function getRandomInt(min, max) {
 	// The maximum is exclusive and the minimum is inclusive
 }
 
-// slot spinning logic
 class Slot {
+	/** Creates a new slot and appends it to the slots array. */
 	constructor() {
-		this.id = slotCount;
+		this.id = slots.length;
 		this.result;
+
+		this.element = document.createElement("img");
+		this.element.className = "slot";
+		slotsDiv.appendChild(this.element);
+
 		slots.push(this);
-		slotCount = slots.length;
 	}
 
 	spin() {
-		// selects a random result symbol from the array
 		this.result = slotSymbols[getRandomInt(0, slotSymbols.length)];
+		//this.element.innerHTML = "<p>" + this.result + "</p>";
+		this.element.src = "/assets/" + this.result + ".png";
 		console.log("slot: " + this.id + "\n" + "result: " + this.result);
 	}
 }
 
 function spinSlots() {
-	for (let i = 0; i < slotCount; i++) {
+	for (let i = 0; i < slots.length; i++) {
 		slots[i].spin();
 	}
 }
 
-// slot and ui drawing logic
-function drawSlots() {
-	setStyle();
-	for (let i = 0; i < slotCount; i++) {
-		ctx.strokeRect(slotPos.x, slotPos.y, slotWidth, slotHeight);
-		slotPos.x += slotWidth;
-		ctx.fillText(slots[i].result, slotPos.x - 75, 55);
-	}
-	slotPos.x = 0;
-}
-
 var buttons = [];
-const buttonContainer = document.querySelector("#button_container");
 
 function createButton(_text, _id, _class, _function) {
 	let _button = document.createElement("button");
@@ -82,6 +68,7 @@ function createButton(_text, _id, _class, _function) {
 }
 
 var spinButton = createButton("SPIN", "spin_button", "", () => { spinSlots() });
+var newSlotButton = createButton("NEW SLOT", "new-slot-button", "", () => { new Slot() });
 
 function populateUI() {
 	for (let i = 0; i < buttons.length; i++) {
@@ -91,25 +78,8 @@ function populateUI() {
 
 populateUI();
 
-// main function(s)
-function draw() {
-	ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
-	drawSlots();
-	requestAnimationFrame(draw);
-}
-
-// changes canvas size to window size
-function changeCanvasSize() {
-	gameCanvas.width = window.innerWidth;
-	gameCanvas.height = window.innerHeight;
-}
-
-addEventListener("resize", changeCanvasSize);
-
-changeCanvasSize();
-
-new Slot(slotCount);
+//new Slot(slotCount);
+new Slot();
 spinSlots();
 
-requestAnimationFrame(draw);
 setInterval(spinSlots, slotTime);

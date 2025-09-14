@@ -18,3 +18,18 @@
 	z-index: 0;
 	border: 1px solid #000000;
 }
+
+#slots {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	width: 100%;
+}
+
+.slot {
+	margin: 10px;
+
+	width: 100px;
+	height: 100px;
+	border: 2px dashed black;
+}
